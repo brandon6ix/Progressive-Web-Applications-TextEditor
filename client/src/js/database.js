@@ -1,7 +1,7 @@
-import { openDB } from 'idb';
+import { openDB } from "idb";
 
-const initdb = async () =>
-  openDB('jate', 1, {
+const initdb = async () => {
+  return openDB("jate", 1, {
     upgrade(db) {
       if (db.objectStoreNames.contains('jate')) {
         console.log('jate database already exists');
@@ -11,50 +11,28 @@ const initdb = async () =>
       console.log('jate database created');
     },
   });
-
-// Method to save content to the database
+};
+// TODO: Add logic to a method that accepts some content and adds it to the database
 export const putDb = async (content) => {
-  console.log('PUT to the database');
-
-  // Open a connection to the 'jate' database with version 1
-  const jateDb = await openDB('jate', 1);
-
-  // Create a transaction and specify the database and data privileges
-  const tx = jateDb.transaction('jate', 'readwrite');
-
-  // Open up the desired object store
-  const store = tx.objectStore('jate');
-
-  // Use the .put() method to add or update data in the store
-  const request = store.put({ id: 1, content: content });
-
-  // Get confirmation of the request
+  const txtEditorDb = await openDB("jate", 1);
+  const tx = txtEditorDb.transaction("jate", "readwrite");
+  const store = tx.objectStore("jate");
+  const request = store.put({ id: 1, value: content });
   const result = await request;
-  console.log('🚀 - data saved to the database', result);
+  console.log("Data saved to the database", result);
 };
 
-// Method to get all content from the database
+// TODO: Add logic for a method that gets all the content from the database
 export const getDb = async () => {
-  console.log('GET all content from the database');
-
-  // Open a connection to the 'jate' database with version 1
-  const jateDb = await openDB('jate', 1);
-
-  // Create a transaction and specify the database and privileges
-  const tx = jateDb.transaction('jate', 'readonly');
-
-  // Open up the desired object store
-  const store = tx.objectStore('jate');
-
-  // Use the .get() method to get the data from the store
+  const txtEditorDb = await openDB("jate", "1");
+  const tx = txtEditorDb.transaction("jate", "readonly");
+  const store = tx.objectStore("jate");
   const request = store.get(1);
-
-  // Wait for the request to complete
   const result = await request;
-  console.log('result.value', result?.content);
-  return result?.content;
+  result
+    ? console.log("Data retrieved from the database", result.value)
+    : console.log("Data not found in the database");
 };
 
-// Initialize the database
 initdb();
 

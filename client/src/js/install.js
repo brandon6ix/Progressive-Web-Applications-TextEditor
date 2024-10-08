@@ -1,50 +1,25 @@
-const butInstall = document.getElementById('buttonInstall');
+const butInstall = document.getElementById("buttonInstall");
 
 // Logic for installing the PWA
-let deferredPrompt;
-
-// Handle the `beforeinstallprompt` event
-window.addEventListener('beforeinstallprompt', (event) => {
-  // Prevent the mini-infobar from appearing on mobile
-  event.preventDefault();
-
-  // Store the event so it can be triggered later
-  deferredPrompt = event;
-
-  // Remove the 'hidden' class from the install button, making it visible
-  butInstall.style.display = 'block';
-
-  console.log('👍', 'beforeinstallprompt', event);
+// TODO: Add an event handler to the `beforeinstallprompt` event
+window.addEventListener("beforeinstallprompt", (event) => {
+  window.deferredPrompt = event;
+  butInstall.classList.toggle("hidden", false);
 });
 
-// Implement the click event handler on the `butInstall` element
-butInstall.addEventListener('click', async () => {
-  console.log('👍', 'butInstall-clicked');
-
-  if (!deferredPrompt) {
+// TODO: Implement a click event handler on the `butInstall` element
+butInstall.addEventListener("click", async () => {
+  const promptEvent = window.deferredPrompt;
+  if (!promptEvent) {
     return;
   }
-
-  // Show the install prompt
-  deferredPrompt.prompt();
-
-  // Wait for the user to respond to the prompt
-  const { outcome } = await deferredPrompt.userChoice;
-
-  console.log('👍', 'userChoice', outcome);
-
-  // Reset the deferredPrompt variable, as it can only be used once
-  deferredPrompt = null;
-
-  // Hide the install button after installation
-  butInstall.style.display = 'none';
+  promptEvent.prompt();
+  window.deferredPrompt = null;
+  butInstall.classList.toggle("hidden", true);
 });
 
-// Handle the `appinstalled` event
-window.addEventListener('appinstalled', (event) => {
-  console.log('👍', 'appinstalled', event);
-  
-  // Clear the install prompt
-  deferredPrompt = null;
+// TODO: Add an handler for the `appinstalled` event
+window.addEventListener("appinstalled", (event) => {
+  window.deferredPrompt = null;
 });
 
