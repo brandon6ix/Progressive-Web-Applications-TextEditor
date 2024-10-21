@@ -58,7 +58,7 @@ To install the application as a desktop app:
 
 ## Screenshots
 
-*(Include screenshots of the app in use here.)*
+[J.A.T.E](./Assets/Screenshot%202024-10-21%20at%2012.07.39 PM.png)
 
 ## Contributing
 
